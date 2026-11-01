@@ -14,7 +14,7 @@ import com.example.synchealth.tandoor.MealNutrition
 object DailyTotals {
 
     /**
-     * [planned] ist die Summe der Gerichte aus dem Essen-Callout, siehe
+     * [planned] ist die Summe der geplanten Gerichte, siehe
      * [com.example.synchealth.essen.MealMerge]. `null` heisst: Es gibt fuer den Tag keinen
      * belastbaren Stand.
      */

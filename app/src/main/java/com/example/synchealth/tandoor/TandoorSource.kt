@@ -26,8 +26,8 @@ class TandoorSource(
 
         /**
          * Kein belastbarer Plan. Was dann geschrieben wird, entscheidet
-         * [com.example.synchealth.essen.MealMerge]: Steht der Tag schon in der Notiz,
-         * gilt der Stand dort, sonst bleiben die fuenf geteilten Felder leer.
+         * [com.example.synchealth.essen.MealMerge]: Ist der Tag schon auf dem Handy gespeichert,
+         * gilt dieser Stand, sonst bleiben die fuenf geteilten Felder leer.
          */
         data class Unavailable(val reason: String) : Outcome
     }

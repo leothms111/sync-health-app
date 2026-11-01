@@ -98,7 +98,7 @@ class HealthRepository(private val context: Context) {
     }
 
     /**
-     * Die einzelnen Ernaehrungseintraege des Tages, fuer die Liste im Essen-Callout.
+     * Die einzelnen Ernaehrungseintraege des Tages, fuer die Mahlzeiten-Liste in der App.
      * Nur zum Anzeigen: Die Summen kommen weiter aus [read].
      */
     suspend fun readMeals(date: LocalDate): List<SamsungMeal> {
