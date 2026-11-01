@@ -209,6 +209,26 @@ class TandoorJsonTest {
         assertNull(parmesan.nutrition)
     }
 
+    /**
+     * Tandoor laesst in `value` stehen, was die umrechenbaren Zeilen ergeben, und haengt
+     * nur eine Marke an: `missing_conversion`, wenn eine zweite Zeile desselben
+     * Lebensmittels sich nicht umrechnen liess, `missing_unit` bei einer Zeile ohne Einheit
+     * (dann mit `value` 0). Die Zahl waere zu niedrig, also zaehlt sie nicht.
+     */
+    @Test
+    fun `eine Marke fuer fehlende Umrechnung oder Einheit verwirft den Wert`() {
+        val flagged = rezept
+            .replace(
+                """"value": 1424.0 }""",
+                """"value": 1424.0, "missing_conversion": { "base_unit": { "id": 1, "name": "EL" } } }""",
+            )
+            .replace(""""265": { "id": 265, "value": 4.5 }""", """"265": { "id": 265, "value": 0, "missing_unit": true }""")
+        val foods = TandoorJson.recipe(flagged, fdcByType).foods
+
+        assertNull(foods.single { it.name == "Vollkornreis" }.nutrition)
+        assertNull(foods.single { it.name == "Tomate" }.nutrition)
+    }
+
     @Test
     fun `ein Gewuerz ohne Menge faellt heraus`() {
         assertTrue(TandoorJson.recipe(rezept, fdcByType).foods.none { it.name == "Salz" })

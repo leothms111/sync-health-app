@@ -153,6 +153,10 @@ object TandoorJson {
      * Die Beitraege je Lebensmittel aus `food_properties`, als `Lebensmittel-ID zu Wert je
      * fdc_id`. Ein `null` heisst: Tandoor kennt den Wert fuer dieses Lebensmittel nicht.
      *
+     * Dazu zaehlen die Marken `missing_conversion` und `missing_unit`. Tandoor laesst
+     * `value` dann stehen, aber ohne die Zeile, die sich nicht rechnen liess, siehe
+     * `add_or_create` in `cookbook/helper/property_helper.py`.
+     *
      * Tandoor schluesselt die Zeilen nach der Typ-ID und wiederholt sie als `id` in der
      * Zeile. Gelesen wird die `id`, dann traegt die Array-Form genauso.
      */
@@ -177,7 +181,8 @@ object TandoorJson {
                 val foodId = entry.int("id")
                     ?: entry.get("food")?.takeIf { it.isJsonObject }?.asJsonObject?.int("id")
                     ?: continue
-                byFood.getOrPut(foodId) { mutableMapOf() }[fdcId] = entry.double("value")
+                val partial = entry.has("missing_conversion") || entry.bool("missing_unit")
+                byFood.getOrPut(foodId) { mutableMapOf() }[fdcId] = entry.double("value").takeUnless { partial }
             }
         }
         return byFood
